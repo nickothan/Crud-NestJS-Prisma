@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { User, Prisma} from '@prisma/client'
 
@@ -13,5 +13,13 @@ export class UsersService {
             skip,
             take:perPage
         })
+    }
+
+    async findByEmail(email: string): Promise<User> {
+        const user = await this.prisma.user.findUnique({
+            where: {email: email}
+        })
+        if(!user) throw new NotFoundException(`User with email ${email} not found`)
+        return user
     }
 }

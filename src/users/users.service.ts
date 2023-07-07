@@ -38,4 +38,20 @@ export class UsersService {
             throw new InternalServerErrorException(`Error creating the user`, error)
         }
     }
+
+    async update(userId: number, data: Prisma.UserUpdateInput): Promise<User> {
+        try {
+            const updatedUser = await this.prisma.user.update({
+                where: {id: userId},
+                data
+            })
+            if(!updatedUser)
+                throw new NotFoundException(`User with ID ${userId} not found`)
+                return updatedUser
+        } catch(error){
+            throw new InternalServerErrorException(
+                `Error updating the user: ${error.message}`
+            )
+        }
+    }
 }

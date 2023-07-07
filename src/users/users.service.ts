@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { User, Prisma} from '@prisma/client'
 
@@ -29,5 +29,13 @@ export class UsersService {
         })
         if(!user) throw new NotFoundException(`User with Id ${userId} not found`)
         return user
+    }
+
+    async create(data: Prisma.UserCreateInput): Promise<User>{
+        try {
+            return await this.prisma.user.create({data})
+        } catch (error) {
+            throw new InternalServerErrorException(`Error creating the user`, error)
+        }
     }
 }

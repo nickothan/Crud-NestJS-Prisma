@@ -15,6 +15,12 @@ export class UsersController {
         return this.usersService.findAll(+page, +perPage)
     }
 
+    @Get('email')
+    findByEmail(@Body() {email}:{email: string}): Promise<User>{
+        console.log("::", {email})
+        return this.usersService.findByEmail(email)
+    }
+
     // Usuario por ID
     @Get(':id')
     findById(@Param('id') id: string): Promise<User>{
